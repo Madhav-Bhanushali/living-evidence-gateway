@@ -1,0 +1,12 @@
+{
+  "method": "POST",
+  "path": "/v1/query",
+  "headers": {
+    "Authorization": "Bearer <API_KEY>",
+    "Content-Type": "application/json"
+  },
+  "body": {
+    "kb_id": "example_company_kb",
+    "question": "What is the return policy, and what is the status of order 42?"
+  }
+}

@@ -1,0 +1,12 @@
+.env
+.env.*
+*.pem
+*.key
+*.sqlite*
+*.db
+.venv/
+__pycache__/
+data/
+runtime/
+logs/
+reports/

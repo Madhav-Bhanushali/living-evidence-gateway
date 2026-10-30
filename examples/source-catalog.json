@@ -1,0 +1,23 @@
+{
+  "document_sources": [
+    {
+      "source_id": "returns_policy",
+      "description": "Return eligibility, deadlines, processing time and exceptions."
+    }
+  ],
+  "database_tools": [
+    {
+      "source_id": "orders",
+      "tool_id": "lookup_status",
+      "description": "Read current order status using an authorized order identifier.",
+      "parameters": {
+        "order_id": "integer"
+      },
+      "allowed_output_fields": [
+        "order_id",
+        "status"
+      ],
+      "max_rows": 1
+    }
+  ]
+}
