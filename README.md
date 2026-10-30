@@ -33,6 +33,12 @@ flowchart LR
 
 The gateway combines established multi-tenant retrieval-augmented generation, policy enforcement and tool-based database access. Its overall architecture is not presented as a novel research method.
 
+## Proposed next architecture
+
+The [evidence-first blueprint](docs/BLUEPRINT.md) expands the design into separate control and data planes, typed operations, server-issued execution capabilities, freshness contracts and layered answer validation. These are proposals, not claims about a deployed system or original research.
+
+Explore the fictional request flow locally in [the offline explorer](explorer/index.html). It uses no model, database, account or external network connection.
+
 ## Read the design
 
 - [Architecture and request flow](docs/ARCHITECTURE.md)

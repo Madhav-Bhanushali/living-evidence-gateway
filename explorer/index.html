@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'none'; img-src 'none'; base-uri 'none'; form-action 'none'">
+<title>Knowledge Gateway · Architecture Explorer</title>
+<style>
+:root{font:15px/1.6 system-ui,sans-serif;color:#25304a;background:#f5f6fb}*{box-sizing:border-box}body{margin:0}header{padding:28px 6%;background:#17223a;color:white;display:flex;justify-content:space-between;align-items:center;gap:24px}header small{color:#a9bce0;text-transform:uppercase;letter-spacing:2px}h1{font-size:24px;margin:4px 0}header span{font-size:12px;color:#addecf;border:1px solid #426865;padding:6px 12px;border-radius:20px}main{max-width:1240px;margin:auto;padding:28px}h2{font-size:27px;line-height:1.3;margin:4px 0 10px}.lead{max-width:790px;color:#6d7890;margin-bottom:24px}.panel{padding:22px;background:white;border:1px solid #e1e5f0;border-radius:18px;margin-bottom:18px}.form{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}label{font-size:12px;font-weight:650;display:block;margin-bottom:6px}select,button{font:inherit;border:1px solid #dbe0ef;padding:9px 13px;border-radius:9px;background:white;color:#384665;cursor:pointer}button:hover{background:#f0f2fb}button:disabled{opacity:.45;cursor:default}button:focus-visible,select:focus-visible{outline:3px solid #a8b4ec;outline-offset:3px}.primary{background:#5965c8;color:white;border-color:#5965c8}.primary:hover{background:#4854b4}.question{font-size:14px;color:#4e5c76;margin:15px 0 0;background:#f5f7fc;border-radius:9px;padding:12px 15px}.nodes{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-top:20px}.node{border:1px solid #e0e5ef;border-radius:12px;padding:17px 8px;text-align:center;background:#f8f9fc;font-size:12px}.node b{display:block;font-size:20px;color:#8b96ac}.node.active{background:#eeeffc;border-color:#a4afe7;color:#4553b0;box-shadow:0 0 0 3px #5965c80c}.route{font-size:13px;color:#647397;margin-top:17px;min-height:24px}.controls{display:flex;gap:9px;align-items:center;flex-wrap:wrap}.controls small{margin-left:auto;color:#7b869b}.inspector{display:grid;grid-template-columns:310px 1fr;gap:18px}.timeline{display:grid;gap:7px;max-height:510px;overflow:auto}.step{font-size:12px;display:flex;gap:10px;text-align:left;width:100%;padding:10px;border-radius:10px}.step i{font-style:normal;font-weight:700;background:#eef1f8;border-radius:7px;min-width:26px;text-align:center;padding:3px}.step.active{background:#edf0fc;border-color:#bbc5ec}.step.active i{background:#5965c8;color:white}.payload{margin:14px 0 0;font:12px/1.65 ui-monospace,monospace;background:#f5f7fc;border:1px solid #e2e7f2;border-radius:10px;padding:17px;max-height:390px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere}.detail-title{font-size:19px;margin:0 0 9px}.detail-note{font-size:13px;color:#6a7892;min-height:42px}.foot{font-size:12px;color:#7d889d;margin-top:22px}a{color:#5360bf}#outcome{font-weight:600;color:#346e61;font-size:13px;margin-top:12px}.tag{font-size:11px;color:#69779b;text-transform:uppercase;letter-spacing:1.5px}.progress{height:4px;background:#edf0f8;border-radius:4px;margin-top:16px;overflow:hidden}#progress{height:100%;background:#7986d9;width:0;transition:width .2s}@media(max-width:800px){.inspector{grid-template-columns:1fr}.nodes{grid-template-columns:repeat(3,1fr)}main{padding:18px}.timeline{max-height:220px}header{padding:20px}header span{max-width:150px}h2{font-size:22px}.controls small{width:100%;margin-left:0}}@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header><div><small>Architecture reference</small><h1>Knowledge Gateway</h1></div><span>Fictional, offline illustration</span></header>
+<main>
+<div class="tag">Explore the proposed design</div>
+<h2>From a question to accountable evidence.</h2>
+<p class="lead">Step through how an application request can become an authorized operation and a source-backed answer. These examples are hard-coded illustrations, not captured requests, implemented security guarantees or live model execution.</p>
+<section class="panel">
+<div class="form"><div><label for="scenario">Choose a scenario</label><select id="scenario"><option value="success">Approved document + record question</option><option value="foreign">Attempt to access another client's KB</option><option value="missing">Missing entity identifier</option><option value="stale">Evidence revoked before response</option></select></div><div><label for="speed">Illustration playback</label><select id="speed"><option value="2400">Slow</option><option value="1400" selected>Normal</option><option value="700">Fast</option></select></div></div>
+<p id="question" class="question"></p>
+<div class="nodes" aria-label="Architecture components">
+<div class="node" data-node="application"><b>01</b>Application</div>
+<div class="node" data-node="identity"><b>02</b>Identity & policy</div>
+<div class="node" data-node="planner"><b>03</b>Model planner</div>
+<div class="node" data-node="connector"><b>04</b>Scoped retrieval</div>
+<div class="node" data-node="evidence"><b>05</b>Evidence bundle</div>
+<div class="node" data-node="answer"><b>06</b>Answer checks</div>
+</div><div id="route" class="route" aria-live="polite"></div>
+<div class="progress"><div id="progress"></div></div>
+</section>
+<section class="panel controls">
+<button id="play" class="primary">Play</button><button id="previous">Previous</button><button id="next">Next</button><button id="restart">Restart</button><small id="counter"></small>
+</section>
+<div class="inspector">
+<section class="panel"><div class="tag" style="margin-bottom:13px">Illustrated steps</div><div id="timeline" class="timeline"></div></section>
+<section class="panel"><h3 id="title" class="detail-title"></h3><div id="note" class="detail-note"></div><pre id="payload" class="payload"></pre><div id="outcome" aria-live="polite"></div></section>
+</div>
+<p class="foot">No network requests, accounts, credentials, models or databases are used. Playback changes only the illustration. Read the <a href="../docs/BLUEPRINT.md">architecture blueprint</a> for assumptions and limits. This explorer is educational; Markdown links open as files when viewed locally.</p>
+</main>
+<script>
+'use strict';
+const $=id=>document.getElementById(id);
+const event=(title,from,to,note,data,outcome='')=>({title,from,to,note,data,outcome});
+const scenarios={
+success:{question:'Example Company: “What is the return policy, and what is the current status of order 42?”',steps:[
+event('Application sends a question','application','identity','Authentication is transported separately from the question. The application does not choose its own authorization scope.',{authentication:'[placeholder; backend-held credential]',body:{kb_id:'example_company_kb',question:'What is the return policy, and what is the current status of order 42?'}}),
+event('Resolve identity and permitted catalog','identity','planner','The gateway derives ownership from authenticated identity and supplies only approved source and operation descriptions.',{owner:'example_company',kb:'example_company_kb',operations:[{id:'orders.status',arguments:{order_id:'integer'},fields:['order_id','status']},{id:'policies.search',description:'Return eligibility, processing times and exceptions'}]}),
+event('Model proposes typed operations','planner','identity','This is an untrusted proposal. Selecting an operation does not create permission to execute it.',{operations:[{kind:'entity_lookup',operation_id:'orders.status',arguments:{order_id:42}},{kind:'section_retrieval',operation_id:'policies.search',arguments:{query:'return eligibility and exceptions'}}]}),
+event('Compile internal execution permission','identity','connector','Trusted code checks ownership, operation shape, entity scope, fields and budgets. This internal object is not accepted from a caller.',{owner:'example_company',policy_version:'example-v1',allowed_operations:['orders.status','policies.search'],entity_scope:{order_id:42},fields:['order_id','status'],max_rows:1,document_limit:3,source_scope:'example_company only'}),
+event('Fetch permitted records and sections','connector','evidence','The database connector uses a registered parameterized query. The document connector selects within approved, active versions.',{database:{operation:'orders.status',arguments:{order_id:42},transaction:'read-only'},documents:{collection:'returns_policy',selected_heading_paths:[['Returns','Eligibility'],['Returns','Exceptions']]}}),
+event('Assemble typed evidence','evidence','answer','Provenance, completeness and source semantics accompany the values. These fictional facts are not model memory.',{items:[{evidence_id:'record-example',kind:'database_result',rows:[{order_id:42,status:'dispatched'}],complete:true,observed_at:'illustrative read time'},{evidence_id:'policy-example',kind:'document',version:'example-v1',heading_path:['Returns','Eligibility'],text:'Eligible unused items may be returned within fourteen days.'}]}),
+event('Generate and check the response','answer','application','Check reference membership and structured facts, then recheck current access. Semantic support still needs evaluation; references alone do not prove correctness.',{answer:'Eligible unused items may be returned within fourteen days. Order 42 is dispatched.',citations:['policy-example','record-example'],validation:['ownership','reference membership','exact status value','current access']},'Illustrated outcome: approved answer with references.')
+]},
+foreign:{question:'A caller authenticated for Example Company requests an unrelated company’s knowledge base.',steps:[
+event('Receive mismatched KB request','application','identity','A KB ID is a selector, not an authorization grant.',{authenticated_owner:'example_company',requested_kb:'unrelated_company_kb'}),
+event('Reject before model or retrieval','identity','application','Ownership validation stops the request. Neither source retrieval nor model execution should occur.',{decision:'deny',reason:'KB does not belong to authenticated owner',model_called:false,source_read:false},'Illustrated outcome: access denied.')
+]},
+missing:{question:'Example Company: “What is the current order status?” — no order identifier supplied.',steps:[
+event('Interpret the requested operation','application','planner','The operation can be recognized without pretending that the missing identifier is known.',{question:'What is the current order status?',candidate_operation:'orders.status',required_arguments:['order_id']}),
+event('Validate missing arguments','planner','identity','The gateway must not authorize an invented record identifier.',{operation:'orders.status',provided_arguments:{},missing_arguments:['order_id'],executable:false}),
+event('Ask for the identifier','identity','application','A clarification is different from a search with zero rows or a database failure.',{response:'Which order ID should I look up?',source_read:false},'Illustrated outcome: clarify before retrieval.')
+]},
+stale:{question:'A permitted policy is retrieved, but access is revoked before the answer can be returned.',steps:[
+event('Retrieve authorized document evidence','connector','evidence','Evidence is initially valid for this request and version.',{owner:'example_company',evidence_id:'policy-example',version:'example-v1',initially_authorized:true}),
+event('Draft an answer','evidence','answer','Generation can take time. Source publication and access may change while it runs.',{draft:'Illustrative answer pending validation',citations:['policy-example'],released:false}),
+event('Revalidate before release','answer','identity','Current scope and publication checks detect the revocation.',{evidence_id:'policy-example',current_authorization:false,decision:'reject'}),
+event('Discard the unreleasable result','identity','application','Do not return revoked content through an answer, evidence list or partial debug trace.',{response:'The source is no longer available for this request.',answer_released:false,partial_evidence_released:false},'Illustrated outcome: revoked evidence withheld.')
+]}
+};
+let selected='success',index=0,playing=false,timer=null;
+function element(tag,cls,text){const node=document.createElement(tag);if(cls)node.className=cls;if(text!==undefined)node.textContent=String(text);return node}
+function stop(){playing=false;clearTimeout(timer);timer=null;$('play').textContent='Play'}
+function render(){const steps=scenarios[selected].steps,e=steps[index];$('question').textContent=scenarios[selected].question;$('title').textContent=e.title;$('note').textContent=e.note;$('payload').textContent=JSON.stringify(e.data,null,2);$('outcome').textContent=e.outcome;$('counter').textContent='Step '+(index+1)+' of '+steps.length;$('route').textContent=e.from+' → '+e.to;$('progress').style.width=((index+1)/steps.length*100)+'%';$('previous').disabled=index===0;$('next').disabled=index===steps.length-1;document.querySelectorAll('[data-node]').forEach(n=>n.classList.toggle('active',[e.from,e.to].includes(n.dataset.node)));$('timeline').replaceChildren();steps.forEach((step,i)=>{const button=element('button','step'+(index===i?' active':''));button.append(element('i','',i+1),element('span','',step.title));button.setAttribute('aria-current',i===index?'step':'false');button.addEventListener('click',()=>{stop();index=i;render()});$('timeline').append(button)})}
+function schedule(){clearTimeout(timer);if(!playing)return;timer=setTimeout(()=>{if(index===scenarios[selected].steps.length-1){stop();return}index++;render();schedule()},Number($('speed').value))}
+$('play').addEventListener('click',()=>{if(playing){stop();return}if(index===scenarios[selected].steps.length-1)index=0;playing=true;$('play').textContent='Pause';render();schedule()});
+$('next').addEventListener('click',()=>{stop();index=Math.min(index+1,scenarios[selected].steps.length-1);render()});
+$('previous').addEventListener('click',()=>{stop();index=Math.max(index-1,0);render()});
+$('restart').addEventListener('click',()=>{stop();index=0;render()});
+$('scenario').addEventListener('change',()=>{stop();selected=$('scenario').value;index=0;render()});
+$('speed').addEventListener('change',()=>{if(playing)schedule()});
+render();
+</script>
+</body>
+</html>
