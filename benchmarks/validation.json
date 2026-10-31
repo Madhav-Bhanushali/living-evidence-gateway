@@ -1,0 +1,13 @@
+{
+  "unit_tests": {
+    "passed": 35,
+    "command": "python -m unittest discover -s tests -v"
+  },
+  "synthetic_benchmark": {
+    "cases": 100,
+    "mutation_rejections": 500,
+    "same_claim_rebases": 100
+  },
+  "data": "fictional fixtures only",
+  "external_model_or_database_requests": 0
+}

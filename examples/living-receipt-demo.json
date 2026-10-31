@@ -1,0 +1,96 @@
+{
+  "prototype": "Living Evidence Witness Compiler",
+  "scope": "fictional typed claims; not unrestricted natural-language truth",
+  "steps": [
+    {
+      "title": "Compile the least-disclosure sufficient bundle",
+      "receipt": {
+        "scope": {
+          "tenant_id": "example_company",
+          "kb_id": "example_kb",
+          "principal_id": "example_app",
+          "request_id": "request-example"
+        },
+        "policy_id": "example_policy",
+        "policy_version": "v1",
+        "policy_digest": "278f4eaf1b8856dbb8d71e5c356736129adff99978110f2a0ba95f77a5817a0f",
+        "required_claims": [
+          "order/42.status",
+          "policy/returns.window_days"
+        ],
+        "claims": {
+          "order/42.status": "dispatched",
+          "policy/returns.window_days": 14
+        },
+        "evidence_ids": [
+          "return_policy",
+          "status_primary"
+        ],
+        "versions": {
+          "return_policy": "v1",
+          "status_primary": "v1"
+        },
+        "evidence_digests": {
+          "return_policy": "503a1351a6cb062ae390c24503eda7a4060c6764b60c46186377b61bc448161d",
+          "status_primary": "35543c48c22145b6f4d38c07c83690d174ba20e760674e7fe5454ba0219aae51"
+        },
+        "cost": 3,
+        "created_at": 1000,
+        "signature": "f7d4ab18ebad17540a85a67eba607f3a5d04d696a45eac480ad6391d2cc6bcd7"
+      },
+      "verified": true
+    },
+    {
+      "title": "Mutate a signed claim",
+      "tampering_rejected": true
+    },
+    {
+      "title": "Revoke the original witness",
+      "old_receipt_rejected": true
+    },
+    {
+      "title": "Repair the witness without changing the claims",
+      "receipt": {
+        "scope": {
+          "tenant_id": "example_company",
+          "kb_id": "example_kb",
+          "principal_id": "example_app",
+          "request_id": "request-example"
+        },
+        "policy_id": "example_policy",
+        "policy_version": "v1",
+        "policy_digest": "278f4eaf1b8856dbb8d71e5c356736129adff99978110f2a0ba95f77a5817a0f",
+        "required_claims": [
+          "order/42.status",
+          "policy/returns.window_days"
+        ],
+        "claims": {
+          "order/42.status": "dispatched",
+          "policy/returns.window_days": 14
+        },
+        "evidence_ids": [
+          "return_policy",
+          "status_replica"
+        ],
+        "versions": {
+          "return_policy": "v1",
+          "status_replica": "v1"
+        },
+        "evidence_digests": {
+          "return_policy": "503a1351a6cb062ae390c24503eda7a4060c6764b60c46186377b61bc448161d",
+          "status_replica": "a06870de022290802d84b6ac0c18862cae9c50d4ffd43a28d320c58aaa947127"
+        },
+        "cost": 4,
+        "created_at": 1000,
+        "signature": "da3b77609dff931fb4aec36802de1c5508d0d6ed0afa9aa79106e9c18513a4ca"
+      },
+      "claims_unchanged": true,
+      "verified": true
+    },
+    {
+      "title": "Change the source fact",
+      "old_answer_rebase_rejected": true
+    }
+  ],
+  "checks_passed": true
+}

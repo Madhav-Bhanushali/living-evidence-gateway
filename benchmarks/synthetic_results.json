@@ -1,0 +1,48 @@
+{
+  "benchmark": "bounded synthetic living-evidence experiment",
+  "case_count": 100,
+  "all_checks_passed": true,
+  "baseline": {
+    "name": "ownership/source/field/freshness-filtered collect-all",
+    "does_not_implement": [
+      "minimum-disclosure selection",
+      "composition exclusions",
+      "bundle budgets"
+    ],
+    "fairness_note": "This is a transparent simple comparator, not an optimized RAG baseline."
+  },
+  "results": {
+    "baseline_units": 798,
+    "selected_units": 299,
+    "baseline_fact_cells": 1497,
+    "selected_fact_cells": 299,
+    "baseline_payload_bytes": 61342,
+    "selected_payload_bytes": 12600,
+    "exact_claim_cases": 100,
+    "minimum_declared_cost_cases": 100,
+    "rebases_preserving_claims": 100,
+    "mutations_attempted": 500,
+    "mutations_rejected": 500,
+    "fact_cell_reduction_percent": 80.03,
+    "payload_byte_reduction_percent": 79.46,
+    "compiler_latency_ms": {
+      "median": 0.109,
+      "p95": 0.2558,
+      "max": 0.3094
+    }
+  },
+  "composition_checks": {
+    "individually_permitted_units_available": true,
+    "forbidden_joint_disclosure_rejected": true,
+    "approved_alternative_selected": true,
+    "limit": "Tags and exclusions are trusted policy metadata; no automatic inference of all privacy risks."
+  },
+  "limits": [
+    "All records, keys, companies and mutations are fictional.",
+    "Claims are explicit structured keys and values, not unrestricted natural-language statements.",
+    "Serialized payload bytes are not tokens, database reads, real privacy leakage or model latency.",
+    "Declared cost is a trusted policy input, not an inferred privacy guarantee.",
+    "Exact selection is bounded by the compiler candidate limit, not a scalable global optimality claim.",
+    "No model quality, production throughput or real-corpus accuracy is measured."
+  ]
+}

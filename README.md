@@ -1,58 +1,78 @@
-# Knowledge Gateway
+# Living Evidence Gateway
 
-An architecture for connecting multiple client applications to a shared language model while keeping retrieval scoped to each client's knowledge.
+**An executable experiment: answers whose evidence can be repaired without silently changing their facts.**
 
-This repository contains a reference design and illustrative examples. It does not contain a deployable server, model weights, client datasets, internal infrastructure details, or production configuration.
+Most retrieval demos stop after producing an answer and citations. This prototype treats evidence as a versioned dependency:
 
-## What it does
+1. Compile the lowest-cost permitted evidence bundle for an explicit set of typed claims.
+2. Bind those claims to their witnesses using an authenticated receipt.
+3. Recheck source versions, ownership, freshness and composition restrictions.
+4. If a witness disappears, try to **rebase** onto other permitted evidence.
+5. If the underlying facts changed, invalidate the old answer instead of preserving it.
 
-An application sends an authenticated question and a knowledge-base identifier. The gateway verifies ownership, builds a permitted source catalog, validates the model's retrieval plan, fetches approved evidence, and asks the model to produce an answer with references.
+This is a standalone Python standard-library implementation using fictional data. It has no database credentials, model dependency, customer records or connection to an internal deployment. It is not a general natural-language truth verifier or a claim of a new research algorithm.
+
+## Run it
+
+Python 3.10 or newer, from the repository root:
+
+```bash
+python -m witness_gateway.demo
+python -m witness_gateway.benchmark
+python -m unittest discover -s tests -v
+```
+
+The demo executes real compiler, signature, revocation and repair logic. The benchmark builds synthetic cases; it does not contact any model or database.
+
+## What is distinctive about this implementation?
+
+The engineering experiment combines **minimum-disclosure selection**, **composition-aware restrictions**, **version-bound receipts** and **same-answer witness repair** in a small inspectable program.
+
+For example, two evidence units might each be permitted separately, while their combined sensitivity tags violate policy. The compiler rejects that combination and looks for an allowed alternative. If the selected source is later revoked, it can repair the witness set only when the typed claim values remain identical.
+
+These ingredients have prior art. We present the integration and executable experiments, not a first-ever invention. See [related work](docs/RELATED_WORK.md).
 
 ```mermaid
 flowchart LR
-    App[Client application] --> Auth[Authenticate and authorize KB]
-    Auth --> Plan[Model proposes retrieval]
-    Plan --> Policy[Gateway validates plan]
-    Policy --> Docs[Scoped document retrieval]
-    Policy --> DB[Registered read-only database tools]
-    Docs --> Evidence[Validate and minimize evidence]
-    DB --> Evidence
-    Evidence --> Answer[Model generates answer]
-    Answer --> Check[Validate access and references]
-    Check --> App
+    Claims[Typed claim contract] --> Compiler[Policy and minimum-disclosure compiler]
+    Sources[Owned versioned evidence] --> Compiler
+    Compiler --> Receipt[Authenticated answer receipt]
+    Receipt --> Verify[Check current witnesses]
+    Verify -->|Witness revoked| Rebase[Find alternate permitted witnesses]
+    Rebase -->|Same claims| Repaired[New receipt, unchanged facts]
+    Rebase -->|Changed or missing facts| Invalidate[Invalidate old answer]
 ```
 
-## Design goals
+## Implemented and proposed
 
-- Separate client ownership, credentials, conversations and retrieval state.
-- Fetch changing database facts through approved parameterized tools.
-- Preserve document versions, page references and extraction quality.
-- Use document structure where appropriate to select coherent sections.
-- Treat model plans and retrieved content as untrusted input.
-- Make missing evidence and incomplete results explicit.
+| Item | Status |
+| --- | --- |
+| Scoped in-memory evidence store | Implemented |
+| Exact bounded evidence-bundle selection | Implemented; at most 18 eligible candidates |
+| Field-key, source, freshness and disclosure budgets | Implemented for typed evidence |
+| Forbidden combinations of trusted sensitivity tags | Implemented |
+| HMAC-authenticated scope/policy/version-bound receipts | Implemented |
+| Verification and same-claim rebase | Implemented |
+| Adversarial unit tests and synthetic benchmark | Implemented |
+| Arbitrary natural-language claim extraction or verification | Not implemented |
+| Live database/model connectors, user authentication or production deployment | Not part of this standalone prototype |
+| Larger control/data-plane design | [Architecture proposal](docs/BLUEPRINT.md) |
 
-The gateway combines established multi-tenant retrieval-augmented generation, policy enforcement and tool-based database access. Its overall architecture is not presented as a novel research method.
+## Read and inspect
 
-## Proposed next architecture
+- [How the prototype works](docs/LIVING_EVIDENCE.md)
+- [Synthetic experiment and limitations](docs/EXPERIMENT.md)
+- [Related work and novelty boundaries](docs/RELATED_WORK.md)
+- [Source implementation](witness_gateway/core.py)
+- [Executable tests](tests/test_witness_gateway.py)
+- [Original generic architecture](docs/ARCHITECTURE.md)
+- [Security model](docs/SECURITY_MODEL.md)
+- [Offline architecture illustration](explorer/index.html)
 
-The [evidence-first blueprint](docs/BLUEPRINT.md) expands the design into separate control and data planes, typed operations, server-issued execution capabilities, freshness contracts and layered answer validation. These are proposals, not claims about a deployed system or original research.
+The offline illustration is conceptual; the Python demo and benchmark execute the actual prototype.
 
-Explore the fictional request flow locally in [the offline explorer](explorer/index.html). It uses no model, database, account or external network connection.
+## Trust and scope
 
-## Read the design
+The evidence store, policy annotations, authenticated scope, clock and signing key are trusted application inputs. A receipt proves integrity and binding under that trust model, not that a source is truthful. Costs are policy annotations, not a formal measure of privacy leakage.
 
-- [Architecture and request flow](docs/ARCHITECTURE.md)
-- [Security boundaries and limitations](docs/SECURITY_MODEL.md)
-- [Client onboarding](docs/ONBOARDING.md)
-- [Generic API example](examples/request.json)
-- [Generic source catalog](examples/source-catalog.json)
-
-## Structure-aware retrieval
-
-A document retriever can use headings and a table of contents to select relevant sections before fetching their text. This design is inspired by the structure-aware retrieval direction explored in [STAIR](https://arxiv.org/abs/2609.03874).
-
-A zero-shot section selector is not a reproduction of STAIR's trained generative retriever. No paper-level accuracy or performance claim is made here.
-
-## Scope
-
-Examples are fictional and illustrate contracts rather than guaranteed model behavior. This documentation is not a claim of production readiness, universal answer accuracy, tenant isolation certification, or measured latency.
+The fixture signing key is public sample material and must never be used for a real deployment. Exact decimal values should be represented explicitly as strings. No live client information is included in this repository.
